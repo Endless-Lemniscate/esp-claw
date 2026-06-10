@@ -44,6 +44,14 @@ menu "Default Wi-Fi Settings"
             falls back to pure AP mode and waits for the user to provision
             new credentials.
 
+    config APP_WIFI_DISABLE_POWER_SAVE
+        bool "Disable STA Wi-Fi power save"
+        default n
+        help
+            Keep the STA radio awake after Wi-Fi init. This trades some power
+            for steadier long-lived HTTP and WebSocket sessions on boards that
+            are normally USB powered.
+
 endmenu
 
 menu "Default Search Settings"

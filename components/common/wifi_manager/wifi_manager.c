@@ -472,6 +472,14 @@ esp_err_t wifi_manager_init(void)
     s_sta_netif = esp_netif_create_default_wifi_sta();
     s_ap_netif = esp_netif_create_default_wifi_ap();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+#if CONFIG_APP_WIFI_DISABLE_POWER_SAVE
+    esp_err_t ps_err = esp_wifi_set_ps(WIFI_PS_NONE);
+    if (ps_err != ESP_OK) {
+        ESP_LOGW(TAG, "Failed to disable Wi-Fi power save: %s", esp_err_to_name(ps_err));
+    } else {
+        ESP_LOGI(TAG, "Wi-Fi STA power save disabled");
+    }
+#endif
     ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL, NULL));
     ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL, NULL));
 

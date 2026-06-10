@@ -30,6 +30,11 @@ CONFIG_ESP_BOARD_DEV_DISPLAY_LCD_SUPPORT=y
 # The IDF default queue (32) backpressures for seconds per event once full.
 CONFIG_ESP_SYSTEM_EVENT_QUEUE_SIZE=256
 
+# This USB-powered AMOLED board is used with long-lived WebSocket/LLM sessions.
+# Keep the STA radio awake and retry longer before giving up on mobile hotspots.
+CONFIG_APP_WIFI_DISABLE_POWER_SAVE=y
+CONFIG_APP_WIFI_MAX_RETRY=20
+
 # USB: Serial JTAG
 CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
 CONFIG_ESP_CONSOLE_SECONDARY_NONE=y

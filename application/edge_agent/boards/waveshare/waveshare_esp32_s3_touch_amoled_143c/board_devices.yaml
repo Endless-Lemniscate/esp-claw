@@ -1,0 +1,107 @@
+version: 1.0.0
+# Devices Configuration for Waveshare ESP32-S3-Touch-AMOLED-1.43C
+
+devices:
+
+  - name: codec_ldo_power
+    type: gpio_ctrl
+    version: default
+    config:
+      active_level: 1
+      default_level: 1
+    peripherals:
+      - name: gpio_codec_ldo_enable
+
+  - name: user_led
+    type: gpio_ctrl
+    version: default
+    config:
+      active_level: 1
+      default_level: 0
+    peripherals:
+      - name: gpio_user_led
+
+  - name: audio_dac
+    chip: es8311
+    type: audio_codec
+    version: default
+    config:
+      adc_enabled: false
+      dac_enabled: true
+      dac_max_channel: 1
+      dac_channel_mask: "1"
+      mclk_enabled: true
+    peripherals:
+      - name: gpio_pa_control
+        gain: 6
+        active_level: 1
+      - name: i2s_audio_out
+      - name: i2c_master
+        address: 0x30
+        frequency: 400000
+
+  - name: audio_adc
+    chip: es7210
+    type: audio_codec
+    version: default
+    config:
+      adc_enabled: true
+      adc_max_channel: 4
+      adc_channel_mask: "0111"
+      adc_channel_labels: ['NA', 'RE', 'FR', 'FL']
+      adc_init_gain: 0
+    peripherals:
+      - name: i2s_audio_in
+      - name: i2c_master
+        address: 0x80
+        frequency: 400000
+
+  - name: display_lcd
+    chip: sh8601
+    type: display_lcd
+    sub_type: spi
+    version: default
+    dependencies:
+      esp_lcd_sh8601: "*"
+    config:
+      x_max: 326
+      y_max: 326
+      mirror_x: true
+      mirror_y: false
+      swap_xy: false
+      invert_color: false
+      io_spi_config:
+        cs_gpio_num: 15
+        dc_gpio_num: -1
+        spi_mode: 0
+        pclk_hz: 40000000
+        lcd_cmd_bits: 32
+        lcd_param_bits: 8
+        trans_queue_depth: 2
+        flags:
+          quad_mode: true
+      lcd_panel_config:
+        reset_gpio_num: 13
+        rgb_ele_order: LCD_RGB_ELEMENT_ORDER_RGB
+        bits_per_pixel: 16
+        vendor_config: NULL
+    peripherals:
+      - name: spi_display
+
+  - name: lcd_touch
+    chip: cst816t
+    type: lcd_touch
+    sub_type: i2c
+    version: default
+    dependencies:
+      espressif/esp_lcd_touch_cst816s: "*"
+    config:
+      io_i2c_config: {}
+      touch_config:
+        x_max: 326
+        y_max: 326
+        rst_gpio_num: 16
+        int_gpio_num: -1
+    peripherals:
+      - name: i2c_master
+        i2c_addr: 0x2a

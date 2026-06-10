@@ -1,0 +1,35 @@
+# Waveshare ESP32-S3-Touch-AMOLED-1.43C board defaults.
+# SoC/module: ESP32-S3-PICO-1-N8R8 (8 MB QIO embedded flash + 8 MB Octal PSRAM).
+
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+
+# Flash: 8 MB, QIO 80 MHz
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+
+# The board physically has 8 MB flash. Keep the full edge_agent runtime, but use
+# the existing 8 MB layout; the 16 MB dual-OTA layout cannot fit on this module.
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions_8MB.csv"
+
+# Embedded Octal PSRAM, 80 MHz
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+
+# CST820 is compatible with the CST816S driver path, but the chip ID check is not
+# reliable across Waveshare 1.43C batches. The physical address is 0x15; the
+# board-manager device YAML uses the shifted 0x2a value expected by its generator.
+CONFIG_ESP_LCD_TOUCH_CST816S_DISABLE_READ_ID=y
+
+# Enable display_lcd device support for the AMOLED panel.
+CONFIG_ESP_BOARD_DEV_DISPLAY_LCD_SUPPORT=y
+
+# LLM HTTP and WebSocket traffic can burst many esp_http_client/httpd events.
+# The IDF default queue (32) backpressures for seconds per event once full.
+CONFIG_ESP_SYSTEM_EVENT_QUEUE_SIZE=256
+
+# USB: Serial JTAG
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y

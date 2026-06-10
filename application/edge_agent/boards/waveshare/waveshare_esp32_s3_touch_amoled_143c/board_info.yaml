@@ -1,0 +1,4 @@
+board: waveshare_esp32_s3_touch_amoled_143c
+chip: esp32s3
+description: "Waveshare ESP32-S3-Touch-AMOLED-1.43C / 1.43C-EN (ESP32-S3-PICO-1-N8R8, 466x466 SH8601/CO5300-compatible AMOLED, CST820 touch)"
+manufacturer: "Waveshare"

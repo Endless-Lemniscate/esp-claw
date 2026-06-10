@@ -1,0 +1,88 @@
+version: 1.0.0
+# Peripherals Configuration for Waveshare ESP32-S3-Touch-AMOLED-1.43C
+#
+# Pin reference from the Waveshare 1.43C schematic and the known-good local BSP:
+#   LCD QSPI: D0=GPIO9, D1=GPIO10, D2=GPIO11, D3=GPIO12, SCK=GPIO14,
+#             CS=GPIO15, RST=GPIO13, TE=GPIO8
+#   Touch:    I2C SDA=GPIO47, SCL=GPIO48, RST=GPIO16, INT=GPIO17, addr=0x15
+#   Audio:    MCLK=GPIO38, SCLK/BCLK=GPIO39, LRCK/WS=GPIO40,
+#             DSDIN/DOUT=GPIO41, DSOUT/DIN=GPIO42, PA=GPIO46, LDO_EN=GPIO18
+#   Other:    LED=GPIO5, CHG_STAT=GPIO7, BAT_ADC=GPIO4, BOOT=GPIO0
+
+peripherals:
+
+  - name: i2c_master
+    type: i2c
+    role: master
+    config:
+      port: 0
+      pins:
+        sda: 47
+        scl: 48
+
+  - name: i2s_audio_out
+    type: i2s
+    role: master
+    format: std-out
+    config: &i2s_config
+      port: 0
+      sample_rate_hz: 16000
+      mclk_multiple: 256
+      data_bit_width: 16
+      slot_bit_width: I2S_SLOT_BIT_WIDTH_AUTO
+      slot_mode: I2S_SLOT_MODE_STEREO
+      slot_mask: I2S_STD_SLOT_BOTH
+      ws_width: 16
+      pins:
+        mclk: 38
+        bclk: 39
+        ws: 40
+        dout: 41
+        din: 42
+
+  - name: i2s_audio_in
+    type: i2s
+    role: master
+    format: std-in
+    config: *i2s_config
+
+  - name: spi_display
+    type: spi
+    role: master
+    config:
+      spi_bus_config:
+        spi_port: SPI2_HOST
+        data0_io_num: 9
+        data1_io_num: 10
+        data2_io_num: 11
+        data3_io_num: 12
+        sclk_io_num: 14
+        max_transfer_sz: 14912
+
+  - name: gpio_codec_ldo_enable
+    type: gpio
+    config:
+      pin: 18
+      mode: GPIO_MODE_OUTPUT
+      default_level: 1
+
+  - name: gpio_pa_control
+    type: gpio
+    config:
+      pin: 46
+      mode: GPIO_MODE_OUTPUT
+      default_level: 0
+
+  - name: gpio_user_led
+    type: gpio
+    config:
+      pin: 5
+      mode: GPIO_MODE_OUTPUT
+      default_level: 0
+
+  - name: gpio_charge_status
+    type: gpio
+    config:
+      pin: 7
+      mode: GPIO_MODE_INPUT
+      default_level: 1
